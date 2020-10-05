@@ -8,6 +8,7 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Framework/interface/Run.h"
+#include "FWCore/Framework/interface/LuminosityBlock.h"
 
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "DataFormats/JetReco/interface/GenJet.h"
@@ -19,6 +20,8 @@
 #include "DataFormats/L1TGlobal/interface/GlobalAlgBlk.h"
 #include "DataFormats/L1Trigger/interface/EGamma.h"
 #include "DataFormats/L1Trigger/interface/Jet.h"
+
+#include "SimDataFormats/GeneratorProducts/interface/GenLumiInfoHeader.h"
 
 #include "UHH2/core/include/Event.h"
 #include "UHH2/core/include/AnalysisModule.h"
@@ -45,6 +48,7 @@ class NtupleWriter : public edm::EDFilter {
       virtual void endJob() override;
 
       virtual void beginRun(edm::Run const&, edm::EventSetup const&) override;
+      virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
       
       // fill gen particles and other info from a reco::jet
       void fill_geninfo_recojet(const reco::Jet& reco_genjet, GenJet& genjet, bool &add);
@@ -59,6 +63,7 @@ class NtupleWriter : public edm::EDFilter {
       TFile *outfile;
       TTree *tr;
       std::string fileName, year;
+      std::string signalModel;
 
       bool doGenJets;
       bool doGenTopJets;
@@ -127,6 +132,7 @@ class NtupleWriter : public edm::EDFilter {
       edm::EDGetToken generator_token;
       edm::EDGetToken pus_token;
       edm::EDGetToken lhe_token;
+      edm::EDGetTokenT<GenLumiInfoHeader> genlumi_token;
       edm::EDGetToken genjetflavor_token;
       edm::EDGetToken dupECALClusters_token;
       edm::EDGetToken hitsNotReplaced_token;

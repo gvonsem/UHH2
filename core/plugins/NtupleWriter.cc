@@ -576,12 +576,14 @@ NtupleWriter::NtupleWriter(const edm::ParameterSet& iConfig): outfile(0), tr(0),
     lhe_token = consumes<LHEEventProduct> ( edm::InputTag("externalLHEProducer"));
     // this one is necessary to read the LHERunInfoProduct:
     consumes<LHERunInfoProduct, edm::InRun>({"externalLHEProducer"});
+    genlumi_token = consumes <GenLumiInfoHeader,edm::InLumi> ( edm::InputTag("generator"));
     pus_token = consumes<std::vector<PileupSummaryInfo> > ( edm::InputTag("slimmedAddPileupInfo"));
     if(doStableGenParticles) stablegenparticle_token = consumes<edm::View<reco::Candidate> >(iConfig.getParameter<edm::InputTag>("stablegenparticle_source"));
     event->genInfo = new GenInfo();
     event->genparticles = new vector<GenParticle>();
     branch(tr, "genInfo","GenInfo", event->genInfo);
     branch(tr, "GenParticles","std::vector<GenParticle>", event->genparticles);
+    branch(tr, "signalModel","std::string", &signalModel);
   }
   if(doPFJetConstituents || doPFTopJetConstituents || doPFxconeJetConstituents || doPFhotvrJetConstituents || doPFxconeDijetJetConstituents){
     event->pfparticles = new vector<PFParticle>();
@@ -1728,6 +1730,18 @@ void NtupleWriter::beginRun(edm::Run const& iRun, edm::EventSetup const&  iSetup
   }
   */
 }
+
+void NtupleWriter::beginLuminosityBlock(edm::LuminosityBlock const& iLumi, edm::EventSetup const& iSetup)
+{
+
+   edm::Handle<GenLumiInfoHeader> genLumiHeader;
+   iLumi.getByToken(genlumi_token, genLumiHeader);
+
+   signalModel = genLumiHeader->configDescription();
+   std::cout << "  Signal model = " << signalModel << std::endl;
+
+}
+
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void NtupleWriter::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
