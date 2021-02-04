@@ -24,6 +24,7 @@ EventHelper::EventHelper(uhh2::Context & ctx_): ctx(ctx_), event(0), pvs(false),
     h_run = declare_in_out<int>("run", "run", ctx);
     h_lumi = declare_in_out<int>("luminosityBlock", "luminosityBlock", ctx);
     h_event = declare_in_out<int>("event", "event", ctx);
+    h_signalModel = declare_in_out<std::string>("signalModel", "signalModel", ctx);
     h_rho = declare_in_out<float>("rho", "rho", ctx);
     h_isRealData = declare_in_out<bool>("isRealData", "isRealData", ctx);
     h_passEcalBadCalib = declare_in_out<bool>("passEcalBadCalib", "passEcalBadCalib", ctx);
@@ -92,6 +93,7 @@ void EventHelper::event_read(){
     event->run = event->get(h_run);
     event->luminosityBlock = event->get(h_lumi);
     event->event = event->get(h_event);
+    event->signalModel = event->get(h_signalModel);
     event->rho = event->get(h_rho);
     event->isRealData = event->get(h_isRealData);
     event->passEcalBadCalib = event->get(h_passEcalBadCalib);
@@ -173,6 +175,7 @@ void EventHelper::event_write(){
     event->set(h_run, event->run);
     event->set(h_lumi, event->luminosityBlock);
     event->set(h_event, event->event);
+    event->set(h_signalModel, event->signalModel);
     event->set(h_rho, event->rho);
     event->set(h_isRealData, event->isRealData);
     event->set(h_passEcalBadCalib, event->passEcalBadCalib);

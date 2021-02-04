@@ -101,6 +101,7 @@ private:
     
     // handles:
     Event::Handle<int> h_run, h_lumi, h_event;
+    Event::Handle<std::string> h_signalModel;
     Event::Handle<float> h_rho, h_bsx, h_bsy, h_bsz, h_prefire, h_prefireUp, h_prefireDown;
     Event::Handle<bool> h_isRealData, h_passEcalBadCalib;
     Event::Handle<std::string> h_year;

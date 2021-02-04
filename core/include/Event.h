@@ -20,6 +20,8 @@ public:
   long long event;
   std::string year;
 
+  std::string signalModel;
+
   float rho;
 
   bool isRealData;
